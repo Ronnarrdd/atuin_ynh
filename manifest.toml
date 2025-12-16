@@ -5,7 +5,6 @@ packaging_format = 2
 id = "example"
 name = "Example app"
 description.en = "Explain in *a few (10~15) words* the purpose of the app or what it actually does (it is meant to give a rough idea to users browsing a catalog of 100+ apps)"
-description.fr = "Expliquez en *quelques* (10~15) mots l'utilité de l'app ou ce qu'elle fait (l'objectif est de donner une idée grossière pour des utilisateurs qui naviguent dans un catalogue de 100+ apps)"
 
 version = "1.0~ynh1"
 
@@ -71,10 +70,9 @@ ram.runtime = "50M"
 
     [install.language]
     ask.en = "Choose the application language"
-    ask.fr = "Choisissez la langue de l'application"
     type = "select"
-    choices = ["fr", "en"]
-    default = "fr"
+    choices = ["en"]
+    default = "en"
 
     [install.admin]
     # this is a generic question - ask strings are automatically handled by YunoHost's core
@@ -84,7 +82,6 @@ ram.runtime = "50M"
     # this is a generic question - ask strings are automatically handled by YunoHost's core
     # Note that user-provided passwords questions are not automatically saved as setting
     help.en = "Use the help field to add an information for the admin about this question."
-    help.fr = "Utilisez le champ aide pour ajouter une information à l'intention de l'administrateur à propos de cette question."
     type = "password"
 
 [resources]
