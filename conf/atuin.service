@@ -1,0 +1,30 @@
+# conf/atuin.service
+[Unit]
+Description=Atuin Sync Server
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=__APP__
+Group=__APP__
+
+WorkingDirectory=__DATA_DIR__
+Environment=HOME=__DATA_DIR__
+
+EnvironmentFile=-__DATA_DIR__/atuin.env
+
+ExecStartPre=/usr/bin/test -w __DATA_DIR__
+ExecStart=__INSTALL_DIR__/atuin server start
+
+Restart=on-failure
+RestartSec=2
+TimeoutStartSec=60
+TimeoutStopSec=30
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+
