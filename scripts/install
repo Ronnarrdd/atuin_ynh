@@ -1,6 +1,6 @@
 #!/bin/bash
 #=================================================
-# YunoHost install script for Atuin server
+# IMPORT GENERIC HELPERS
 #=================================================
 
 source /usr/share/yunohost/helpers
