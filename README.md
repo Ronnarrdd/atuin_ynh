@@ -4,8 +4,8 @@ It shall NOT be edited by hand.
 -->
 
 <h1>
-  <img src="https://raw.githubusercontent.com/YunoHost/apps/main/logos/atuin.png" width="32px" alt="Logo of Atuin server">
-  Atuin server, packaged for YunoHost
+  <img src="https://raw.githubusercontent.com/YunoHost/apps/main/logos/atuin.png" width="32px" alt="Logo of Atuin">
+  Atuin, packaged for YunoHost
 </h1>
 
 Self-hosted Atuin for syncing and backing up encrypted shell history across devices. Registration is disabled by default; see doc/ADMIN.md for details.
@@ -20,14 +20,14 @@ Self-hosted Atuin for syncing and backing up encrypted shell history across devi
 
 
 ## Screenshots
-![Screenshot of Atuin server](./doc/screenshots/atuin.png)
-![Screenshot of Atuin server](./doc/screenshots/atuin_demo.gif)
+![Screenshot of Atuin](./doc/screenshots/atuin.png)
+![Screenshot of Atuin](./doc/screenshots/atuin_demo.gif)
 
 ## 📦 Developer info
 
 [![Automatic tests level](https://apps.yunohost.org/badge/cilevel/atuin)](https://ci-apps.yunohost.org/ci/apps/atuin/)
 
-🛠️ Upstream Atuin server repository: <https://github.com/atuinsh/atuin>
+🛠️ Upstream Atuin repository: <https://github.com/atuinsh/atuin>
 
 Pull request are welcome and should target the [`testing` branch](https://github.com/YunoHost-Apps/atuin_ynh/tree/testing).
 
