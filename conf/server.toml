@@ -3,6 +3,6 @@
 
 host = "127.0.0.1"
 port = __PORT__
-open_registration = true
+open_registration = false
 db_uri = "sqlite:///__DATA_DIR__/atuin.sqlite"
 
