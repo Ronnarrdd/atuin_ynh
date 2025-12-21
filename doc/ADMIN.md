@@ -6,7 +6,7 @@ That means new users **cannot** register until you enable registration manually.
 ### Enable registration (temporarily)
 ```bash
 sudo sed -i 's/^open_registration = .*/open_registration = true/' /home/yunohost.app/atuin/server.toml
-sudo systemctl restart atuin
+sudo yunohost service log atuin
 ```
 Now users can register using the Atuin client.
 
