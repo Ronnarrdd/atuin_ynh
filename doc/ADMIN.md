@@ -12,8 +12,8 @@ Now users can register using the Atuin client.
 
 ### Disable registration
 ```bash
-sudo sed -i 's/^open_registration = .*/open_registration = false/' /home/yunohost.app/atuin/server.toml
-sudo systemctl restart atuin
+sudo sed -i 's/^open_registration = .*/open_registration = true/' /var/www/atuin/server.toml
+sudo yunohost service restart atuin
 ```
 ## Troubleshooting
 ```bash
