@@ -6,9 +6,6 @@ ynh_abort_if_errors
 # Path to Atuin server configuration
 config_file="$install_dir/server.toml"
 
-# Systemd service name equals the app id
-service_name="$app"
-
 get__open_registration() {
   local value
 
@@ -33,8 +30,8 @@ set__open_registration() {
     printf "\nopen_registration = %s\n" "${open_registration}" >> "$config_file"
   fi
 
-  ynh_print_info "Applying open_registration=${open_registration} and restarting ${service_name}..."
-  ynh_systemd_action --service_name="$service_name" --action=restart
+  ynh_print_info "Applying open_registration=${open_registration} and restarting ${app}..."
+  ynh_systemctl --service_name="$app" --action=restart
 }
 
 ynh_app_config_run "$1"
