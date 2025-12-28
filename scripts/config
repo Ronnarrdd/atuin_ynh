@@ -23,7 +23,13 @@ get__open_registration() {
 }
 
 set__open_registration() {
-  # Value provided by YunoHost config panel: true / false
+  # Normalize value to TOML-compatible boolean: true / false
+  case "${open_registration,,}" in
+    true|yes|1) open_registration="true" ;;
+    false|no|0) open_registration="false" ;;
+    *) open_registration="false" ;;
+  esac
+
   if grep -qE '^\s*open_registration\s*=' "$config_file"; then
     sed -i -E "s/^\s*open_registration\s*=.*/open_registration = ${open_registration}/" "$config_file"
   else
@@ -31,7 +37,7 @@ set__open_registration() {
   fi
 
   ynh_print_info "Applying open_registration=${open_registration} and restarting ${app}..."
-  ynh_systemctl --service_name="$app" --action=restart
+  ynh_systemctl --service="$app" --action="restart"
 }
 
 ynh_app_config_run "$1"
