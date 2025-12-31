@@ -25,6 +25,10 @@ Defaults:
       1) ynh-dev-trixie-unstable if exists
       2) ynh-dev-bookworm-unstable if exists
   - DOMAIN defaults to atuin.yolo.test
+
+Cleanup:
+  - Client containers are deleted automatically on script exit.
+  - Set KEEP_CLIENTS=1 to keep them for debugging.
 EOF
 }
 
@@ -79,6 +83,33 @@ YNH_CA_PATH="${YNH_CA_PATH:-/etc/ssl/certs/ca-yunohost_crt.pem}"
 : "${EMAIL:?Missing EMAIL in vars.sh}"
 : "${PASSWORD:?Missing PASSWORD in vars.sh}"
 
+cleanup_instance() {
+  local n="$1"
+  if incus info "$n" >/dev/null 2>&1; then
+    log "Deleting ${n}"
+    incus delete -f "$n" >/dev/null
+  fi
+}
+
+# Cleanup on exit:
+# - previously clients were only deleted at the beginning
+# - if the script fails mid-run, they'd be left behind
+# - set KEEP_CLIENTS=1 to keep them for debugging
+cleanup_on_exit() {
+  local exit_code=$?
+  if [[ "${KEEP_CLIENTS:-0}" == "1" ]]; then
+    warn "KEEP_CLIENTS=1 set -> keeping client containers (${CLIENT1_NAME}, ${CLIENT2_NAME})"
+    exit "$exit_code"
+  fi
+
+  # Always try cleanup; don't mask original failure
+  set +e
+  cleanup_instance "${CLIENT1_NAME}"
+  cleanup_instance "${CLIENT2_NAME}"
+  exit "$exit_code"
+}
+trap cleanup_on_exit EXIT
+
 log "Atuin version: ${VERSION}"
 log "YunoHost container: ${YNH_CONTAINER}"
 log "Domain: ${DOMAIN}"
@@ -97,14 +128,6 @@ if [[ -z "${YNH_IP}" ]]; then
   exit 1
 fi
 log "${YNH_CONTAINER} IPv4 = ${YNH_IP}"
-
-cleanup_instance() {
-  local n="$1"
-  if incus info "$n" >/dev/null 2>&1; then
-    log "Deleting ${n}"
-    incus delete -f "$n" >/dev/null
-  fi
-}
 
 install_atuin_quiet() {
   local n="$1"
