@@ -117,6 +117,11 @@ install_atuin_quiet() {
     export DEBIAN_FRONTEND=noninteractive
     {
       apt-get -qq update
+
+      # We install ca-certificates mainly because we need HTTPS to:
+      #  - download Atuin release artifacts from GitHub via curl
+      # It also provides the base system trust store, which matters later if the YunoHost
+      # instance uses HTTPS (we then add YunoHost's *local* CA on top of this).
       apt-get -qq install -y ca-certificates curl tar openssl
     } >>\"\$log\" 2>&1 || {
       echo '[ERROR] apt install failed. Last 120 log lines:' >&2
@@ -143,6 +148,10 @@ install_atuin_quiet() {
 
 inject_hosts() {
   local n="$1"
+
+  # We hardcode the DOMAIN -> YNH_IP mapping into /etc/hosts because this is a *local* test domain
+  # (e.g. atuin.yolo.test). We don't want or rely on external DNS for this E2E test.
+  # This makes "curl http(s)://$DOMAIN" and Atuin sync resolve to the YunoHost container reliably.
   log "${n}: Injecting /etc/hosts: ${YNH_IP} ${DOMAIN}"
   incus exec "$n" -- bash -lc "
     set -euo pipefail
@@ -157,6 +166,9 @@ install_yunohost_ca_into_client() {
   local client="$1"
 
   log "${client}: Installing YunoHost CA from ${YNH_CONTAINER}:${YNH_CA_PATH} ..."
+  # Stream CA cert from YunoHost container into client container and register it in system trust store.
+  # This is needed only when the server is reached via HTTPS and uses a local/self-signed CA,
+  # otherwise clients will fail with TLS errors (UnknownIssuer).
   incus exec "${YNH_CONTAINER}" -- bash -lc "test -s '${YNH_CA_PATH}'" >/dev/null 2>&1 || {
     err "YunoHost CA file not found or empty: ${YNH_CA_PATH} (override via YNH_CA_PATH=...)"
     exit 1
@@ -217,6 +229,8 @@ log "Using ATUIN_SYNC_ADDRESS=${SYNC_ADDR}"
 
 if [[ "${scheme}" == "https" ]]; then
   warn "HTTPS detected. Installing YunoHost local CA into both clients to avoid UnknownIssuer..."
+  # Only do this for HTTPS. For HTTP there's no TLS validation to fix, and adding extra CA handling
+  # would just be unnecessary moving parts.
   install_yunohost_ca_into_client "${CLIENT1_NAME}"
   install_yunohost_ca_into_client "${CLIENT2_NAME}"
 fi
@@ -229,6 +243,11 @@ incus exec "${CLIENT1_NAME}" -- bash -lc "
 
   atuin register -u '${USERNAME}' -e '${EMAIL}' -p '${PASSWORD}'
 
+  # RUN_ID uniquely identifies *this* test run (nanosecond timestamp).
+  # We prefix all injected history items with ATUIN_TEST_${RUN_ID}_* so we can:
+  #  - grep only our own test commands
+  #  - avoid false positives from existing shell history
+  #  - run this script repeatedly without clashes
   RUN_ID=\$(date +%s%N)
   echo \"\$RUN_ID\" > /tmp/atuin_run_id
 
