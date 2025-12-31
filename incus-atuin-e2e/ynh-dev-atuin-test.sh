@@ -267,7 +267,7 @@ incus exec "${CLIENT1_NAME}" -- bash -lc "
   atuin register -u '${USERNAME}' -e '${EMAIL}' -p '${PASSWORD}'
 
   # RUN_ID uniquely identifies *this* test run (nanosecond timestamp).
-  # We prefix all injected history items with ATUIN_TEST_${RUN_ID}_* so we can:
+  # We prefix all injected history items with ATUIN_TEST_\${RUN_ID}_* so we can:
   #  - grep only our own test commands
   #  - avoid false positives from existing shell history
   #  - run this script repeatedly without clashes
