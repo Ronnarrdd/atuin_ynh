@@ -1,0 +1,1 @@
+Atuin transforme un historique shell basique en un outil puissant : base SQLite, contexte enrichi, recherche ultrarapide et pertinente. Cerise sur le gâteau, votre historique reste cohérent sur toutes vos machines grâce à une synchronisation chiffrée

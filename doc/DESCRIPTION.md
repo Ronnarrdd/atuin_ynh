@@ -1,2 +1,1 @@
-Sync, search and backup shell history.  
-Atuin replaces your existing shell history with a SQLite database, and records additional context for your commands. With this context, Atuin gives you faster and better search of your shell history. Atuin syncs your shell history between all of your machines. Additionally, it provides fully encrypted synchronisation of your history between machines, via an Atuin server (in this case self-hosted with Yunohost).
+Atuin transforms a basic shell history into a powerful tool: enriched context, lightning-fast and accurate search. And the icing on the cake, your history stays consistent across all your machines thanks to encrypted synchronization.
